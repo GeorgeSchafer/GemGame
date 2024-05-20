@@ -1,16 +1,24 @@
 {
 	"folders": [
 		{
+			"name": "GemGame",
 			"path": "."
 		},
 		{
+			"name": "sh",
+			"path": "sh"
+		},
+		{
+			"name": "vjsc",
 			"path": "vjsc"
 		},
 		{
+			"name": "grid",
 			"path": "grid"
 		},
 		{
-			"path": "sh"
+			"name": "Enumjs",
+			"path": "grid/Enumjs"
 		}
 	],
 	"settings": {}
