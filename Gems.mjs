@@ -9,14 +9,14 @@ import {
     Selection,
     StyleSheet,
     Listener,
-        ListenerOnLoad, 
+    ListenerOnLoad,
 
     // Classables
     // // Containers
     Img,
     Div,
-        DivBtn,
-        FlexBox,
+    DivBtn,
+    FlexBox,
     Figure,
     Form,
     Label,
@@ -50,7 +50,7 @@ import {
     Sub,
     Sup,
     Span,
-        Text,
+    Text,
     Code,
     Pre,
 
@@ -62,7 +62,8 @@ import {
 import { Grid } from './grid/Grid.mjs'
 
 const kframe = {
-    fall: 'fall'
+    fall: 'fall',
+    matched: 'matched',
 }
 
 const colorHex = {
@@ -134,155 +135,180 @@ const IMG =
 class Gem {
     type = ''
 
-    constructor(img=null)
-    {
-        this.img = img
-        this.element = img.element
+    constructor(IMG, classes = [], spot) {
+        this.img = new Img(IMG, 'gem', ['gem'], spot)
         this.selectListener()
+        this.element = this.img.element
     }
 
-    static random(spot)
-    {
+    static random(spot) {
         const i = Math.floor(Math.random() * 19)
-        let gem
+        let constructedGem
 
-        if(i >=  0 && i <=  1){ 
-            gem = new Gray(spot)
+        if (i >= 0 && i <= 1) {
+            constructedGem = new Gray([gem.gray.color], spot)
         }
-        else if (i >=  2 && i <=  4){
-            gem = new Red(spot)
+        else if (i >= 2 && i <= 4) {
+            constructedGem = new Red([gem.red.color], spot)
         }
-        else if (i >=  5 && i <=  6){
-            gem = new Orange(spot)
+        else if (i >= 5 && i <= 6) {
+            constructedGem = new Orange([gem.orange.color], spot)
         }
-        else if (i >=  7 && i <= 10){ 
-            gem = new Yellow(spot)
+        else if (i >= 7 && i <= 10) {
+            constructedGem = new Yellow([gem.yellow.color], spot)
         }
-        else if (i >= 11 && i <= 12){
-            gem = new Green(spot)
+        else if (i >= 11 && i <= 12) {
+            constructedGem = new Green([gem.green.color], spot)
         }
-        else if (i >= 13 && i <= 15){
-            gem = new Blue(spot)
+        else if (i >= 13 && i <= 15) {
+            constructedGem = new Blue([gem.blue.color], spot)
         }
-        else if (i >= 16 && i <= 17){
-            gem = new Violet(spot)
+        else if (i >= 16 && i <= 17) {
+            constructedGem = new Violet([gem.violet.color], spot)
         }
-        else if (i >= 18 && i <= 18){
-            gem = new White(spot)
+        else if (i >= 18 && i <= 18) {
+            constructedGem = new White([gem.white.color], spot)
         }
         else {
             throw new Error(`Gem.random() generated an out-of-bound integer: ${i}`)
         }
 
-        gem.img.element.id = `spot-${spot}`
-        return gem
+        constructedGem.element.id = `spot-${spot}`
+        return constructedGem
     }
 
-    selectListener()
-    {
+    selectListener(){
         this.img.addEventListener(event.element.click, () => {
             const summary = 'select a gem to move'
-            if(this.element.classList.contains('selected')){
+            if (this.element.classList.contains('selected')) {
                 this.element.classList.remove('selected')
                 selected--
-            } else if(!this.element.classList.contains('selected') && selected < 2) {
+            } else if (!this.element.classList.contains('selected') && selected < 2) {
                 this.element.classList.add('selected')
                 this.element.classList.add('matched')
                 selected++
             }
         })
     }
+
+    matchListener() {
+
+        this.img.listeners.push(
+            this.img.listeners.addEventListener(event.element.click, () => {
+                const summary = 'runs the match animation'
+                console.log(summary)
+                const classes = ['gem', 'img']
+                classes = classes.splice(classes.indexOf('fall'),1)
+                classes.push('matched')
+                classes.push('gem')
+                this.img = new IMG(this.element.src, this.element.alt, classes, this.element.id)
+        }))
+    }
 }
 
 class Gray extends Gem {
     type = gem.gray.type
 
-    constructor(spot)
-    {
-        super(new Img(IMG.gray, 'gray gem', ['gem', kframe.fall, gem.gray.color], spot))
+    constructor(classes = [], spot) {
+        super(IMG.gray, classes, spot)
     }
 }
 
 class Red extends Gem {
     type = gem.red.type
 
-    constructor(spot)
-    {
-        super(new Img(IMG.red, 'red gem', ['gem', kframe.fall, gem.red.color], spot))
+    constructor(classes = [], spot) {
+        super(IMG.red, classes, spot)
     }
 }
 
 class Orange extends Gem {
     type = gem.orange.type
 
-    constructor(spot)
-    {
-        super(new Img(IMG.orange, 'orange gem', ['gem', kframe.fall, gem.orange.color], spot))
+    constructor(classes = [], spot) {
+        super(IMG.orange, classes, spot)
     }
 }
 
 class Yellow extends Gem {
     type = gem.yellow.type
 
-    constructor(spot)
-    {
-        super(new Img(IMG.yellow, 'yellow gem', ['gem', kframe.fall, gem.yellow.color], spot))
+    constructor(classes = [], spot) {
+        super(IMG.yellow, classes, spot)
     }
 }
 
 class Green extends Gem {
     type = gem.yellow.type
 
-    constructor(spot)
-    {
-        super(new Img(IMG.green, 'green gem', ['gem', kframe.fall, gem.green.color], spot))
+    constructor(classes = [], spot) {
+        super(IMG.green, classes, spot)
     }
 }
 
 class Blue extends Gem {
     type = gem.blue.type
 
-    constructor(spot)
-    {
-        super(new Img(IMG.blue, 'blue gem', ['gem', kframe.fall, gem.yellow.color], spot))
+    constructor(classes = [], spot) {
+        super(IMG.blue, classes, spot)
     }
 }
 
 class Violet extends Gem {
     type = gem.violet.type
 
-    constructor(spot)
-    {
-        super(new Img(IMG.violet, 'violet gem', ['gem', kframe.fall, gem.yellow.color], spot))
-        
+    constructor(classes = [], spot) {
+        super(IMG.violet, classes, spot)
     }
 }
 
 class White extends Gem {
     type = gem.white.type
 
-    constructor(spot)
-    {
-        super(new Img(IMG.white, 'white gem', ['gem', kframe.fall, gem.yellow.color], spot))
+    constructor(classes = [], spot) {
+        super(IMG.white, classes, spot)
     }
 }
 
-class Line
-{
-    constructor(int)
-    {
-        this.flexBox = new FlexBox(flex.c, ['line', flex.flow.default], `line${int}`)
-        const spot = ['a','b','c','d','e','f','g','h']
-        for( let i = 0; i < 8; i++)
-        {
-            const gem = Gem.random(spot[i])
-            this.flexBox.element.appendChild(gem.img.element)            
+class Line {
+    spot = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
+
+    constructors(grid){
+        this.flexBox = new FlexBox(flex.cr, ['line', flex.flow.default], `line${ this.renderSpot(int)}`)
+        grid = new Grid(18,18)
+    }
+
+    constructor(int) {
+        this.flexBox = new FlexBox(flex.cr, ['line', flex.flow.default], `line${this.renderSpot(250)}`)
+        for (let i = 0; i < 8; i++) {
+            const gem = Gem.random(this.spot[i])
+            this.flexBox.element.appendChild(gem.img.element)
         }
     }
 
-    getSpot(char)
-    {
-        if('abcdefgh'.includes(char) === false){ 
+    renderSpot(int){
+        int = BigInt(int)
+        let result = ''
+        let placeInt = int
+        let charInt = int
+
+        while(placeInt > 1){
+            charInt = placeInt%BigInt(10)
+            result += this.spot[charInt]
+            placeInt /= BigInt(10)
+            console.log(
+                'start:', typeof int, int, '\n',
+                'places:', placeInt, '\n', 
+                'charInt:', charInt, '\n',
+                'char:', this.spot[charInt], '\n', 
+                'result:', result)
+        }
+
+
+    }
+
+    getSpot(char) {
+        if ('abcdefgh'.includes(char) === false) {
             throw new Error('Line.getSpot() received an invalid character')
         }
         else {
@@ -290,44 +316,40 @@ class Line
         }
     }
 
-    insertGem(char, gem)
-    {
+    insertGem(char, gem) {
         this.getSpot(char).appendChild(gem)
     }
 
-    removeGem(char)
-    {
+    removeGem(char) {
         this.getSpot(char).removeChild()
     }
 
 }
 
 class PlayField {
-    constructor(height)
-    {
+    constructor(height) {
         this.data = new Grid(height, 8),
-        this.container = new FlexBox(flex.r,['field'], 'field'),
-        this.lines = []
+            this.container = new FlexBox(flex.r, ['field'], 'field'),
+            this.lines = []
 
-        for(let i = 0; i < height; i++)
-        {
+        for (let i = 0; i < height; i++) {
             this.lines.push(new Line(i))
             this.container.element.appendChild(this.lines[i].flexBox.element)
         }
     }
 
-    getLine(int)
-    {
+    getLine(int) {
         return this.lines[int]
     }
 
-    getSpot(int, char)
-    {
+    getSpot(int, char) {
         return this.lines[int].getSpot(char)
     }
 }
 
 const play = new PlayField(8)
+const grid = play.data
+grid.populateGrid(() => { return Gem.random() })
 let selected = 0
 
 document.body.appendChild(play.container.element)

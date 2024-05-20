@@ -6,10 +6,10 @@ html {
 div.field {
     min-width: 64px;
     max-width: 512px;
-    padding-top: 128px;
+    padding-top: 64px;
     margin: 0 auto;
     background-color: #333;
-    border-radius: 0 0 16px 16px;
+    border-radius: 16px;
     box-shadow: 2px 2px 1px #000, inset 1px 1px 1px #fff;
 }
 
@@ -29,10 +29,25 @@ img.selected {
     box-shadow: 2px 2px 2px black, inset 1px 1px 1px white;
 }
 
+img.selected-merge-up {
+    border-radius: 0px 16px 16px 16px;
+}
+
+img.selected-merge-down {
+    border-radius: 16px 16px 0px 16px;
+}
+
+img.selected-merge-left {
+    border-radius: 16px 0px 16px 16px;
+}
+
+img.selected-merge-right {
+    border-radius: 16px 16px 16px 0px;
+}
+
 @media screen and (width < 1024px) {
     div.field {
         width: 512px;
-        padding-top: 64px;
     }
 
     div.line {
@@ -55,6 +70,7 @@ img.selected {
     div.field {
         width: 128px;
         padding-top: 16px;
+        border-radius: 8px;
     }
 
     div.line {
@@ -66,6 +82,8 @@ img.selected {
     div.field {
         width: 64px;
         padding-top: 8px;
+        border-radius: 4px;
+        box-shadow: 1px 1px 1px #000, inset 1px 1px 1px #777;
     }
 
     div.line {
@@ -118,6 +136,13 @@ img.selected {
 }
 
 @keyframes matched {
-    from { opacity: 1;}
-    to { opacity: 0;}
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: scale(0);
+    }
 }
