@@ -273,17 +273,16 @@ class White extends Gem {
 class Line {
     spot = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
 
-    constructors(grid){
-        this.flexBox = new FlexBox(flex.cr, ['line', flex.flow.default], `line${ this.renderSpot(int)}`)
-        grid = new Grid(18,18)
+    constructor(int){
+        this.flexbox = new FlexBox(flex.cr, ['line', flex.flow.default], `line${int}`)
+        this.element = FlexBox.element
+        // this.flexBox = new FlexBox(flex.cr, ['line', flex.flow.default], `line${ this.renderSpot(int)}`)
+        // this.renderSpot()
     }
 
-    constructor(int) {
-        this.flexBox = new FlexBox(flex.cr, ['line', flex.flow.default], `line${this.renderSpot(250)}`)
-        for (let i = 0; i < 8; i++) {
-            const gem = Gem.random(this.spot[i])
-            this.flexBox.element.appendChild(gem.img.element)
-        }
+    constructors(int) {
+        int = BigInt(int)
+        this.flexBox = new FlexBox(flex.cr, ['line', flex.flow.default], `line${this.renderSpot(int)}`)
     }
 
     renderSpot(int){
@@ -292,12 +291,15 @@ class Line {
         let placeInt = int
         let charInt = int
 
+        console.log('start:', typeof int, int, '\n',)
+
         while(placeInt > 1){
+            if(placeInt % 10n === 0) placeInt /= BigInt(10)
             charInt = placeInt%BigInt(10)
             result += this.spot[charInt]
-            placeInt /= BigInt(10)
+            placeInt --
+
             console.log(
-                'start:', typeof int, int, '\n',
                 'places:', placeInt, '\n', 
                 'charInt:', charInt, '\n',
                 'char:', this.spot[charInt], '\n', 
@@ -308,7 +310,7 @@ class Line {
     }
 
     getSpot(char) {
-        if ('abcdefgh'.includes(char) === false) {
+        if ('abcdefghij'.includes(char) === false) {
             throw new Error('Line.getSpot() received an invalid character')
         }
         else {
@@ -316,9 +318,9 @@ class Line {
         }
     }
 
-    insertGem(char, gem) {
-        this.getSpot(char).appendChild(gem)
-    }
+    pushGem(gem) {
+        this.element.appendChild(gem)
+    }  
 
     removeGem(char) {
         this.getSpot(char).removeChild()
@@ -327,15 +329,14 @@ class Line {
 }
 
 class PlayField {
-    constructor(height) {
-        this.data = new Grid(height, 8),
-            this.container = new FlexBox(flex.r, ['field'], 'field'),
-            this.lines = []
+    constructor(height=8n, width=8n) {
+        width = BigInt(width)
+        height = BigInt(height)
+        this.grid = new Grid(height, width)
+        this.container = new FlexBox(flex.r, ['field'], 'field')
+        this.lines = []
 
-        for (let i = 0; i < height; i++) {
-            this.lines.push(new Line(i))
-            this.container.element.appendChild(this.lines[i].flexBox.element)
-        }
+
     }
 
     getLine(int) {
@@ -347,9 +348,9 @@ class PlayField {
     }
 }
 
-const play = new PlayField(8)
+const play = new PlayField()
 const grid = play.data
-grid.populateGrid(() => { return Gem.random() })
+
 let selected = 0
 
 document.body.appendChild(play.container.element)

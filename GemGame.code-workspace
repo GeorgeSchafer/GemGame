@@ -21,5 +21,7 @@
 			"path": "grid/Enumjs"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "GemGame"
+	}
 }
