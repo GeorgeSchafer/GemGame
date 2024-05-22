@@ -61,9 +61,28 @@ import {
 } from './vjsc/vanilla.mjs'
 import { Grid } from './grid/Grid.mjs'
 
-const kframe = {
-    fall: 'fall',
-    matched: 'matched',
+const keyframe = {
+    fall1spot: 'fall1spot',
+    // animation: fall1spot .5
+    fall2spot: 'fall2spot',
+    // animation: fall2spot
+    fall3spot: 'fall3spot',
+    // animation: fall3spot
+    fall4spot: 'fall4spot',
+    // animation: fall4spot
+    fall5spot: 'fall5spot',
+    // animation: fall5spot
+    fall6spot: 'fall6spot',
+    // animation: fall6spot
+    fall7spot: 'fall7spot',
+    // animation: fall7spot
+    fall8spot: 'fall8spot',
+    // animation: fall8spot
+    matched: {
+        class: 'matched',
+        animation: 'matched .5s ease 0s 1 normal forwards;'
+    },
+    // animation: animation: matched .5s ease 0s 1 normal forwards;
 }
 
 const colorHex = {
@@ -136,9 +155,12 @@ class Gem {
     type = ''
 
     constructor(IMG, classes = [], spot) {
-        this.img = new Img(IMG, 'gem', ['gem'], spot)
+        this.img = new Img(IMG, 'gem', ['gem'])
+        this.container = new Div(null, spot)
+        this.container.appendChild(this.img)
         this.selectListener()
-        this.element = this.img.element
+        this.spot = spot
+        this.element = this.container.element
     }
 
     static random(spot) {
@@ -180,29 +202,36 @@ class Gem {
     selectListener(){
         this.img.addEventListener(event.element.click, () => {
             const summary = 'select a gem to move'
-            if (this.element.classList.contains('selected')) {
-                this.element.classList.remove('selected')
+            this.img.element.animation = keyframe.select.animation
+            if (this.img.element.classList.contains('selected')) {
+                this.img.element.classList.remove('selected')
                 selected--
-            } else if (!this.element.classList.contains('selected') && selected < 2) {
-                this.element.classList.add('selected')
-                this.element.classList.add('matched')
+            } else if (!this.img.element.classList.contains('selected') && selected < 2) {
+                this.img.element.classList.add('selected')
+                this.img.element.classList.add('matched')
                 selected++
             }
         })
     }
 
     matchListener() {
-
         this.img.listeners.push(
-            this.img.listeners.addEventListener(event.element.click, () => {
-                const summary = 'runs the match animation'
-                console.log(summary)
-                const classes = ['gem', 'img']
-                classes = classes.splice(classes.indexOf('fall'),1)
-                classes.push('matched')
-                classes.push('gem')
-                this.img = new IMG(this.element.src, this.element.alt, classes, this.element.id)
-        }))
+            event.element.click, () => {
+                console.log('Summary: re-creates the img element with ' +
+                    'the match animation.')
+                const classes = ['gem','matched']
+                this.img = new Img(this.element.src, this.element.alt, classes, this.element.id)
+            })
+
+        // this.img.listeners.push(
+        //     this.img.listeners.addEventListener(event.element.click, () => {
+        //         console.log('runs the match animation')
+        //         const classes = ['gem', 'img'] // img class? what am I thinking?
+        //         classes = classes.splice(classes.indexOf(keyframe.fall8),1)
+        //         classes.push('matched')
+        //         classes.push('gem')
+        //         this.img = new IMG(this.element.src, this.element.alt, classes, this.element.id)
+        // }))
     }
 }
 
