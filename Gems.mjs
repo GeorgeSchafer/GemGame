@@ -132,7 +132,7 @@ const IMG =
     gray: './img/gray.svg'
 }
 
-class Gem {
+class Gem extends Node {
     type = ''
 
     constructor(IMG, classes = [], spot) {
@@ -329,30 +329,39 @@ class FieldColumn {
 }
 
 class PlayField {
+    
     constructor(height=8n, width=8n) {
         width = BigInt(width)
         height = BigInt(height)
         this.grid = new Grid(height, width)
         this.container = new FlexBox(flex.r, ['field'], 'field')
         this.columns = []
-
+        console.log(this.grid)
 
     }
 
-    getLine(int) {
+    getColumn(int) {
         return this.columns[int]
     }
 
     getSpot(int, char) {
         return this.columns[int].getSpot(char)
     }
+
+    placeGem(x,y,gem=Gem.random()){
+        this.getSpot(x,y).appendChild(gem)
+        this.data.getNode(x,y).data = gem
+    }
+
+    
 }
 
-const play = new PlayField()
-const grid = play.data
-
+const playField = new PlayField(4,4)
 let selected = 0
 
-document.body.appendChild(play.container.element)
+
+
+document.body.appendChild(playField.container.element)
+
 
 
