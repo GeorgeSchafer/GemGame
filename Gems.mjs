@@ -270,7 +270,7 @@ class White extends Gem {
     }
 }
 
-class Line {
+class FieldColumn {
     spot = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
 
     constructor(int){
@@ -334,17 +334,17 @@ class PlayField {
         height = BigInt(height)
         this.grid = new Grid(height, width)
         this.container = new FlexBox(flex.r, ['field'], 'field')
-        this.lines = []
+        this.columns = []
 
 
     }
 
     getLine(int) {
-        return this.lines[int]
+        return this.columns[int]
     }
 
     getSpot(int, char) {
-        return this.lines[int].getSpot(char)
+        return this.columns[int].getSpot(char)
     }
 }
 
