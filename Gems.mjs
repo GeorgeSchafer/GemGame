@@ -132,6 +132,20 @@ const IMG =
     gray: './img/gray.svg'
 }
 
+class BigIntArray extends Array {
+    constructor(args){
+        super(args)
+    }
+
+    getIndex(n){
+        if(typeof n === 'bigint'){
+            return this[Number.parseInt(n)]
+        } else {
+            return this[n]
+        }
+    }
+}
+
 class Gem extends Node {
     type = ''
 
@@ -270,40 +284,39 @@ class White extends Gem {
     }
 }
 
-class FieldColumn {
-    spot = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
+class FieldColumn { // integers must be of type BigInt
+    static spot = new BigIntArray(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'])
 
     constructor(int){
-        this.flexbox = new FlexBox(flex.cr, ['line', flex.flow.default], `line${int}`)
-        this.element = FlexBox.element
-        // this.flexBox = new FlexBox(flex.cr, ['line', flex.flow.default], `line${ this.renderSpot(int)}`)
-        // this.renderSpot()
+        this.div = new FlexBox(flex.cr, ['line', flex.flow.default], `line${int}`)
+        this.element = this.div.element
+        this.renderSpot(int)
     }
 
-    constructors(int) {
-        int = BigInt(int)
-        this.flexBox = new FlexBox(flex.cr, ['line', flex.flow.default], `line${this.renderSpot(int)}`)
-    }
+    // constructors(int) {
+    //     int = BigInt(int)
+    //     this.flexBox = new FlexBox(flex.cr, ['line', flex.flow.default], `line${this.renderSpot(int)}`)
+    // }
 
     renderSpot(int){
-        int = BigInt(int)
-        let result = ''
-        let placeInt = int
+        let renderedSpot = ''
+        let placeInt = int // tens, hundreds, or thousands place
         let charInt = int
 
-        console.log('start:', typeof int, int, '\n',)
+        while(placeInt > 1n){
+            if(placeInt % 10n === 0){ // looks like this is needed to reduce a long integer to the next digit place (10 => 1)
+                placeInt /= 10n
+            }
 
-        while(placeInt > 1){
-            if(placeInt % 10n === 0) placeInt /= BigInt(10)
-            charInt = placeInt%BigInt(10)
-            result += this.spot[charInt]
+            charInt = placeInt % 10n
+            renderedSpot += FieldColumn.spot[Number(charInt)]
             placeInt --
 
             console.log(
                 'places:', placeInt, '\n', 
                 'charInt:', charInt, '\n',
-                'char:', this.spot[charInt], '\n', 
-                'result:', result)
+                'char:', FieldColumn.spot.getIndex(charInt), '\n', 
+                'spotStr:', renderedSpot)
         }
 
 
@@ -312,8 +325,7 @@ class FieldColumn {
     getSpot(char) {
         if ('abcdefghij'.includes(char) === false) {
             throw new Error('Line.getSpot() received an invalid character')
-        }
-        else {
+        } else {
             return this.element.querySelector(`#spot-${char}`)
         }
     }
@@ -323,7 +335,8 @@ class FieldColumn {
     }  
 
     removeGem(char) {
-        this.getSpot(char).removeChild()
+        const nodes = new Array(this.getSpot(char).childNodes)
+        nodes.forEach(node => node.remove())
     }
 
 }
@@ -331,13 +344,29 @@ class FieldColumn {
 class PlayField {
     
     constructor(height=8n, width=8n) {
-        width = BigInt(width)
-        height = BigInt(height)
+        this.width = BigInt(width)
+        this.height = BigInt(height)
         this.grid = new Grid(height, width)
         this.container = new FlexBox(flex.r, ['field'], 'field')
+        this.element = this.container.element
         this.columns = []
+        this.createColumns()
+        this.columns.forEach(column => {
+            this.element.appendChild(column)
+            console.log('added column')
+        })
         console.log(this.grid)
 
+    }
+
+    createColumns(){
+        for(let i = 0n; i < this.width; i++){
+            const column = new FieldColumn(i)
+            this.columns.push = column
+            this.element.appendChild(column.element)
+            console.log('column:', column)
+        }
+        console.log('createColumns() finished')
     }
 
     getColumn(int) {
@@ -352,8 +381,6 @@ class PlayField {
         this.getSpot(x,y).appendChild(gem)
         this.data.getNode(x,y).data = gem
     }
-
-    
 }
 
 const playField = new PlayField(4,4)
