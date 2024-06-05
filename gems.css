@@ -92,7 +92,7 @@ img.selected-merge-right {
 }
 
 @keyframes fall {
-    00% {
+    0% {
         animation-timing-function: ease-in;
         opacity: 0;
         transform: translateY(-800%);
@@ -144,5 +144,57 @@ img.selected-merge-right {
     to {
         opacity: 0;
         transform: scale(0);
+    }
+}
+
+@keyframes merge-down {
+    from {
+        margin-bottom: 2px;
+        border-bottom-left-radius: 16px;
+        border-bottom-right-radius: 16px;
+    }
+    to {
+        margin-bottom: 0px;
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
+}
+
+@keyframes merge-up {
+    from {
+        margin-top: 2px;
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+    }
+    to {
+        margin-top: 0px;
+        border-top-left-radius: 0px;
+        border-top-right-radius: 0px;
+    }
+}
+
+@keyframes merge-left {
+    from {
+        margin-left: 2px;
+        border-bottom-left-radius: 16px;
+        border-top-left-radius: 16px;
+    }
+    to {
+        margin-left: 0px;
+        border-bottom-left-radius: 0px;
+        border-top-left-radius: 0px;
+    }
+}
+
+@keyframes merge-up {
+    from {
+        margin-right: 2px;
+        border-bottom-left-radius: 16px;
+        border-top-right-radius: 16px;
+    }
+    to {
+        margin-right: 0px;
+        border-bottom-left-radius: 0px;
+        border-top-right-radius: 0px;
     }
 }

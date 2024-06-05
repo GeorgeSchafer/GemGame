@@ -64,6 +64,10 @@ import { Grid } from './grid/Grid.mjs'
 const kframe = {
     fall: 'fall',
     matched: 'matched',
+    mergeDown: 'merge-down',
+    mergeUp: 'merge-up',
+    mergeRight: 'merge-right',
+    mergeLeft: 'merge-left'
 }
 
 const colorHex = {
@@ -144,9 +148,13 @@ class BigIntArray extends Array {
             return this[n]
         }
     }
+
+    indexOf(char){
+        return this.indexOf(char)
+    }
 }
 
-class Gem extends Node {
+class Gem {
     type = ''
 
     constructor(IMG, classes = [], spot) {
@@ -199,7 +207,7 @@ class Gem extends Node {
                 selected--
             } else if (!this.element.classList.contains('selected') && selected < 2) {
                 this.element.classList.add('selected')
-                this.element.classList.add('matched')
+                // this.element.classList.add('matched')
                 selected++
             }
         })
@@ -287,36 +295,23 @@ class White extends Gem {
 class FieldColumn { // integers must be of type BigInt
     static spot = new BigIntArray(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'])
 
-    constructor(int){
-        this.div = new FlexBox(flex.cr, ['line', flex.flow.default], `line${int}`)
+    constructor(spotInt){
+        this.div = new FlexBox(flex.cr, ['line', flex.flow.default], `line${spotInt}`)
         this.element = this.div.element
-        this.renderSpot(int)
+        this.renderSpot(spotInt)
     }
 
-    // constructors(int) {
-    //     int = BigInt(int)
-    //     this.flexBox = new FlexBox(flex.cr, ['line', flex.flow.default], `line${this.renderSpot(int)}`)
-    // }
-
-    renderSpot(int){
+    renderSpot(spotInt){
         let renderedSpot = ''
-        let placeInt = int // tens, hundreds, or thousands place
-        let charInt = int
+        let placeInt = spotInt // tens, hundreds, or thousands place
+        let charInt = spotInt
 
         while(placeInt > 1n){
-            if(placeInt % 10n === 0){ // looks like this is needed to reduce a long integer to the next digit place (10 => 1)
-                placeInt /= 10n
-            }
-
             charInt = placeInt % 10n
             renderedSpot += FieldColumn.spot[Number(charInt)]
             placeInt --
-
-            console.log(
-                'places:', placeInt, '\n', 
-                'charInt:', charInt, '\n',
-                'char:', FieldColumn.spot.getIndex(charInt), '\n', 
-                'spotStr:', renderedSpot)
+            const gem = Gem.random()
+            this.element.appendChild(gem.element)
         }
 
 
@@ -353,9 +348,7 @@ class PlayField {
         this.createColumns()
         this.columns.forEach(column => {
             this.element.appendChild(column)
-            console.log('added column')
         })
-        console.log(this.grid)
 
     }
 
@@ -364,7 +357,6 @@ class PlayField {
             const column = new FieldColumn(i)
             this.columns.push = column
             this.element.appendChild(column.element)
-            console.log('column:', column)
         }
         console.log('createColumns() finished')
     }
