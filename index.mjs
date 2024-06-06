@@ -6,7 +6,7 @@ import {
     unit,
 
     // Base Classes
-    Selection,
+    OptionSelection,
     StyleSheet,
     Listener,
     ListenerOnLoad,
@@ -20,6 +20,7 @@ import {
     Figure,
     Form,
     Label,
+
     // // Input
     Button,
     Input,
@@ -59,7 +60,6 @@ import {
     addAdoptedStyleSheet,
     JSONCSS,
 } from './vjsc/vanilla.mjs'
-import { Grid } from './grid/Grid.mjs'
 import {
     EasyAccessor,
     Enum,
@@ -67,18 +67,19 @@ import {
     View,
     Player,
     Position,
+    Scene,
     Score,
     Spread,
     Typeface,
     Frame,
     SquareFrame,
-    Img,
+    Img as PhaserImg,
     SpriteSheet,
 } from './phaserhelpers/index.mjs'
 
 
 
-const gem = {
+const gem_path = {
     gray: {
         color: 'gray',
         name: 'hematite',
@@ -120,6 +121,7 @@ const gem = {
         type: 'wild',
     },
 }
+
 const IMG =
 {
     red: './img/png/red.png',
@@ -131,7 +133,36 @@ const IMG =
     white: './img/png/white.png',
     gray: './img/png/gray.png'
 }
+const game = new Phaser.Game(config(VIEW, PHYSICS))
+const VIEW = new View(800,600)
+const PHYSICS = {
+    default: 'arcade',
+    arcade: {
+        gravity: { y: 256 },
+        debug: false
+    }
+}
 
+function config(VIEW, PHYSICS){
+    const config = new Config(VIEW, PHYSICS)
+    
+    config.scene = {
+        preload: preload,
+        create: create,
+        update: update
+    }
+
+    return config
+}
+
+function preload (){
+}
+
+function create (){
+}
+
+function update (){
+}
 
 
 
