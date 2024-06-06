@@ -7,3 +7,6 @@
 [submodule "phaserhelpers"]
 	path = phaserhelpers
 	url = https://github.com/jauntyjocularjay/phaserhelpers.git
+[submodule "phaserboilerplate"]
+	path = phaserboilerplate
+	url = https://www.github.com/jauntyjocularjay/phaserboilerplate
